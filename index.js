@@ -7,9 +7,39 @@ const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
   await connectDB();
+  app.use(express.urlencoded({ extended: true }));
+  function wrapAsync(fn) {
+    return function (req, res, next) {
+      fn(req, res, next).catch((err) => next(err));
+    };
+  }
+  // app.get('/khodam', async (req, res) => {
+  //   try {
+  //     const count = await Khodam.countDocuments();
+  //     console.log('Document count:', count); // Log document count
+  //     if (count === 0) {
+  //       return res.status(404).json({ message: 'No Khodam found' });
+  //     }
 
-  app.get('/khodam', async (req, res) => {
-    try {
+  //     const randomIndex = Math.floor(Math.random() * count);
+  //     console.log('Random index:', randomIndex); // Log random index
+  //     const randomKhodam = await Khodam.findOne().skip(randomIndex);
+
+  //     if (!randomKhodam) {
+  //       return res.status(404).json({ message: 'No Khodam found' });
+  //     }
+
+  //     console.log(randomKhodam);
+  //     res.send(randomKhodam);
+  //   } catch (error) {
+  //     console.error('Error fetching Khodam:', error.message); 
+  //     res.status(500).json({ message: error.message });
+  //   }
+  // });
+
+  app.post('/khodam', wrapAsync(async (req, res) => {
+    const { name } = req.params
+      try {
       const count = await Khodam.countDocuments();
       console.log('Document count:', count); // Log document count
       if (count === 0) {
@@ -25,12 +55,13 @@ const startServer = async () => {
       }
 
       console.log(randomKhodam);
-      res.send(randomKhodam);
+      res.redirect(`/khodam?${name}`)
+
     } catch (error) {
       console.error('Error fetching Khodam:', error.message); 
       res.status(500).json({ message: error.message });
     }
-  });
+  }))
 
   app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
