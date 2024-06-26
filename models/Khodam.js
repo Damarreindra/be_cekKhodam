@@ -8,6 +8,6 @@ const KhodamSchema = new mongoose.Schema({
   },
 });
 
-const Khodam = mongoose.model('Khodam', KhodamSchema);
+const Khodam = mongoose.model('Khodam', KhodamSchema, 'khodams');
 
 module.exports = Khodam;

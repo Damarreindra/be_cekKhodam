@@ -49,7 +49,8 @@ db.once('open', async () => {
   ];
 
   try {
-    await Khodam.insertMany(khodams);
+    const saving = await Khodam.insertMany(khodams);
+   
     console.log('Data khodam berhasil ditambahkan');
   } catch (error) {
     console.error('Error menambahkan data khodam:', error);
