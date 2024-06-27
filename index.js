@@ -29,31 +29,32 @@ const startServer = async () => {
       fn(req, res, next).catch((err) => next(err));
     };
   }
+ 
   app.get('/khodam', wrapAsync(async (req, res) => {
-    const { name } = req.query;  // Extracting name from query parameters
+    const { name } = req.query;
+    console.log('Received name:', name);
+
     try {
-        const count = await Khodam.countDocuments();
-        console.log('Document count:', count); // Log document count
-        if (count === 0) {
-            return res.status(404).json({ message: 'No Khodam found' });
-        }
+        if (name === "rehan") {
+            res.json({ name, khodam: "Anjing Rabies" });
+        } else if (name === "dile") {
+            res.json({ name, khodam: "Antena Biru" });
+        } else {
+            const count = await Khodam.countDocuments();
+            if (count === 0) {
+                return res.status(404).json({ message: 'No Khodam found' });
+            }
 
-        const randomIndex = Math.floor(Math.random() * count);
-        const randomKhodam = await Khodam.findOne().skip(randomIndex);
+            const randomIndex = Math.floor(Math.random() * count);
+            const randomKhodam = await Khodam.findOne().skip(randomIndex);
 
-        if (!randomKhodam) {
-            return res.status(404).json({ message: 'No Khodam found' });
+            if (!randomKhodam) {
+                return res.status(404).json({ message: 'No Khodam found' });
+            }
+
+            res.json({ name, khodam: randomKhodam.name });
         }
-        if(name==="rehan"){
-          res.json({ name, khodam: "Anjing Rabies" });
-        }else if(name==="dile"){
-          res.json({ name, khodam: "Antena Biru" });
-        }else{
-          res.json({ name, khodam: randomKhodam });
-        }
-      
     } catch (error) {
-        console.error('Error fetching Khodam:', error.message); 
         res.status(500).json({ message: error.message });
     }
 }));
