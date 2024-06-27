@@ -8,7 +8,7 @@ const cors = require('cors');
 
 const allowedOrigins = [
   'http://localhost:3000',  // for local development
-  // 'https://your-deployed-frontend.com'  // replace with your actual deployed frontend URL
+  'https://khodamku-apa.vercel.app/'  // replace with your actual deployed frontend URL
 ];
 
 app.use(cors({
@@ -52,7 +52,7 @@ const startServer = async () => {
           res.json({ name, khodam: {name:"Badut"} });
         }
         else if(name==="alpat"){
-          res.json({ name, khodam: {name:"Starlght Princess", img:'https://res.cloudinary.com/dttd52ltg/image/upload/v1719501663/gbvqydur5fe1jhan5r4c.jpg'} });
+          res.json({ name, khodam: {name:"Starlight Princess", img:'https://res.cloudinary.com/dttd52ltg/image/upload/v1719501663/gbvqydur5fe1jhan5r4c.jpg'} });
         }
         else{
           res.json({ name, khodam: randomKhodam });
