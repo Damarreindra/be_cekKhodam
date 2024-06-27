@@ -4,6 +4,22 @@ const Khodam = require('./models/Khodam');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const cors = require('cors');
+
+const allowedOrigins = [
+  'http://localhost:3000',  // for local development
+  // 'https://your-deployed-frontend.com'  // replace with your actual deployed frontend URL
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+}));
 
 const startServer = async () => {
   await connectDB();
