@@ -13,55 +13,31 @@ const startServer = async () => {
       fn(req, res, next).catch((err) => next(err));
     };
   }
-  // app.get('/khodam', async (req, res) => {
-  //   try {
-  //     const count = await Khodam.countDocuments();
-  //     console.log('Document count:', count); // Log document count
-  //     if (count === 0) {
-  //       return res.status(404).json({ message: 'No Khodam found' });
-  //     }
+  app.get('/khodam', wrapAsync(async (req, res) => {
+    const { name } = req.query;  // Extracting name from query parameters
+    try {
+        const count = await Khodam.countDocuments();
+        console.log('Document count:', count); // Log document count
+        if (count === 0) {
+            return res.status(404).json({ message: 'No Khodam found' });
+        }
 
-  //     const randomIndex = Math.floor(Math.random() * count);
-  //     console.log('Random index:', randomIndex); // Log random index
-  //     const randomKhodam = await Khodam.findOne().skip(randomIndex);
+        const randomIndex = Math.floor(Math.random() * count);
+        console.log('Random index:', randomIndex); // Log random index
+        const randomKhodam = await Khodam.findOne().skip(randomIndex);
 
-  //     if (!randomKhodam) {
-  //       return res.status(404).json({ message: 'No Khodam found' });
-  //     }
+        if (!randomKhodam) {
+            return res.status(404).json({ message: 'No Khodam found' });
+        }
 
-  //     console.log(randomKhodam);
-  //     res.send(randomKhodam);
-  //   } catch (error) {
-  //     console.error('Error fetching Khodam:', error.message); 
-  //     res.status(500).json({ message: error.message });
-  //   }
-  // });
-
-  app.post('/khodam', wrapAsync(async (req, res) => {
-    const { name } = req.params
-      try {
-      const count = await Khodam.countDocuments();
-      console.log('Document count:', count); // Log document count
-      if (count === 0) {
-        return res.status(404).json({ message: 'No Khodam found' });
-      }
-
-      const randomIndex = Math.floor(Math.random() * count);
-      console.log('Random index:', randomIndex); // Log random index
-      const randomKhodam = await Khodam.findOne().skip(randomIndex);
-
-      if (!randomKhodam) {
-        return res.status(404).json({ message: 'No Khodam found' });
-      }
-
-      console.log(randomKhodam);
-      res.redirect(`/khodam?${name}`)
-
+        console.log(randomKhodam);
+        res.json({ name, khodam: randomKhodam });
     } catch (error) {
-      console.error('Error fetching Khodam:', error.message); 
-      res.status(500).json({ message: error.message });
+        console.error('Error fetching Khodam:', error.message); 
+        res.status(500).json({ message: error.message });
     }
-  }))
+}));
+
 
   app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
